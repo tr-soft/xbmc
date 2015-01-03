@@ -81,6 +81,11 @@ DLLEXPORT int GUI_get_video_resolution(void *hdl, void *cb)
   return ((CB_GUILib*)cb)->GetVideoResolution();
 }
 
+DLLEXPORT const char * GUI_get_info_label(void *hdl, void *cb, const char *label, int context)
+{
+  return ((CB_GUILib*)cb)->GetInfoLabel(label, context);
+}
+
 DLLEXPORT CAddonGUIWindow* GUI_Window_create(void *hdl, void *cb, const char *xmlFilename, const char *defaultSkin, bool forceFallback, bool asDialog)
 {
   return new CAddonGUIWindow(hdl, cb, xmlFilename, defaultSkin, forceFallback, asDialog);
@@ -469,6 +474,43 @@ string CAddonGUIProgressControl::GetDescription() const
     return "";
 
   return ((CB_GUILib*)m_cb)->Control_Progress_GetDescription(((AddonCB*)m_Handle)->addonData, m_ProgressHandle);
+}
+
+
+///-------------------------------------
+/// cGUIEditControl
+
+DLLEXPORT CAddonGUIEditControl* GUI_control_get_edit(void *hdl, void *cb, CAddonGUIWindow *window, int controlId)
+{
+  return new CAddonGUIEditControl(hdl, cb, window, controlId);
+}
+
+DLLEXPORT void GUI_control_release_edit(CAddonGUIEditControl* p)
+{
+  delete p;
+}
+
+CAddonGUIEditControl::CAddonGUIEditControl(void *hdl, void *cb, CAddonGUIWindow *window, int controlId)
+ : m_Window(window)
+ , m_ControlId(controlId)
+ , m_Handle(hdl)
+ , m_cb(cb)
+{
+  m_EditHandle = ((CB_GUILib*)m_cb)->Window_GetControl_Edit(((AddonCB*)m_Handle)->addonData, m_Window->m_WindowHandle, controlId);
+}
+
+const char *CAddonGUIEditControl::GetLabel2() const
+{
+  if (!m_EditHandle)
+    return NULL;
+
+  return ((CB_GUILib*)m_cb)->Control_Edit_GetLabel2(((AddonCB*)m_Handle)->addonData, m_EditHandle);
+}
+
+void CAddonGUIEditControl::SetLabel2(const char *label)
+{
+  if (m_EditHandle)
+    ((CB_GUILib*)m_cb)->Control_Edit_SetLabel2(((AddonCB*)m_Handle)->addonData, m_EditHandle, label);
 }
 
 

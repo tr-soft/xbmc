@@ -62,6 +62,7 @@ CAddonCallbacksGUI::CAddonCallbacksGUI(CAddon* addon)
   m_callbacks->GetScreenHeight                = CAddonCallbacksGUI::GetScreenHeight;
   m_callbacks->GetScreenWidth                 = CAddonCallbacksGUI::GetScreenWidth;
   m_callbacks->GetVideoResolution             = CAddonCallbacksGUI::GetVideoResolution;
+  m_callbacks->GetInfoLabel                   = CAddonCallbacksGUI::GetInfoLabel;
   m_callbacks->Window_New                     = CAddonCallbacksGUI::Window_New;
   m_callbacks->Window_Delete                  = CAddonCallbacksGUI::Window_Delete;
   m_callbacks->Window_SetCallbacks            = CAddonCallbacksGUI::Window_SetCallbacks;
@@ -118,6 +119,9 @@ CAddonCallbacksGUI::CAddonCallbacksGUI(CAddon* addon)
   m_callbacks->Control_Progress_GetInfo       = CAddonCallbacksGUI::Control_Progress_GetInfo;
   m_callbacks->Control_Progress_GetDescription= CAddonCallbacksGUI::Control_Progress_GetDescription;
 
+  m_callbacks->Control_Edit_GetLabel2         = CAddonCallbacksGUI::Control_Edit_GetLabel2;
+  m_callbacks->Control_Edit_SetLabel2         = CAddonCallbacksGUI::Control_Edit_SetLabel2;
+
   m_callbacks->ListItem_Create                = CAddonCallbacksGUI::ListItem_Create;
   m_callbacks->ListItem_GetLabel              = CAddonCallbacksGUI::ListItem_GetLabel;
   m_callbacks->ListItem_SetLabel              = CAddonCallbacksGUI::ListItem_SetLabel;
@@ -167,6 +171,17 @@ int CAddonCallbacksGUI::GetScreenWidth()
 int CAddonCallbacksGUI::GetVideoResolution()
 {
   return (int)g_graphicsContext.GetVideoResolution();
+}
+
+const char * CAddonCallbacksGUI::GetInfoLabel(const char *label, int context)
+{
+	CGUIInfoLabel l;
+	l.SetLabel(label, "", context);
+	std::string string = l.GetLabel(context, false, NULL);
+
+	char *buffer = (char*)malloc(string.length() + 1);
+	strcpy(buffer, string.c_str());
+	return buffer;
 }
 
 GUIHANDLE CAddonCallbacksGUI::Window_New(void *addonData, const char *xmlFilename, const char *defaultSkin, bool forceFallback, bool asDialog)
@@ -1136,6 +1151,30 @@ const char* CAddonCallbacksGUI::Control_Progress_GetDescription(void *addonData,
   char *buffer = (char*) malloc (string.length()+1);
   strcpy(buffer, string.c_str());
   return buffer;
+}
+
+const char * CAddonCallbacksGUI::Control_Edit_GetLabel2(void *addonData, GUIHANDLE handle)
+{
+  CAddonCallbacks* helper = (CAddonCallbacks*)addonData;
+  if (!helper || !handle)
+    return NULL;
+
+  CGUIEditControl *pControl = (CGUIEditControl*)handle;
+  std::string string = pControl->GetLabel2().c_str();
+
+  char *buffer = (char *)malloc(string.length()+1);
+  strcpy(buffer, string.c_str());
+  return buffer;
+}
+
+void CAddonCallbacksGUI::Control_Edit_SetLabel2(void *addonData, GUIHANDLE handle, const char *label)
+{
+  CAddonCallbacks* helper = (CAddonCallbacks*)addonData;
+  if (!helper || !handle)
+    return;
+
+  CGUIEditControl *pControl = (CGUIEditControl*)handle;
+  pControl->SetLabel2(label);
 }
 
 GUIHANDLE CAddonCallbacksGUI::ListItem_Create(void *addonData, const char *label, const char *label2, const char *iconImage, const char *thumbnailImage, const char *path)

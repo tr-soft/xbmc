@@ -105,6 +105,7 @@ typedef void (*GUIUnlock)();
 typedef int (*GUIGetScreenHeight)();
 typedef int (*GUIGetScreenWidth)();
 typedef int (*GUIGetVideoResolution)();
+typedef const char* (*GUIGetInfoLabel)(const char *label, int context);
 typedef GUIHANDLE   (*GUIWindow_New)(void *addonData, const char *xmlFilename, const char *defaultSkin, bool forceFallback, bool asDialog);
 typedef void        (*GUIWindow_Delete)(void *addonData, GUIHANDLE handle);
 typedef void        (*GUIWindow_SetCallbacks)(void *addonData, GUIHANDLE handle, GUIHANDLE clienthandle, bool (*)(GUIHANDLE handle), bool (*)(GUIHANDLE handle, int), bool (*)(GUIHANDLE handle, int), bool (*)(GUIHANDLE handle, int));
@@ -154,6 +155,8 @@ typedef float       (*GUIControl_Progress_GetPercentage)(void *addonData, GUIHAN
 typedef void        (*GUIControl_Progress_SetInfo)(void *addonData, GUIHANDLE handle, int iInfo);
 typedef int         (*GUIControl_Progress_GetInfo)(void *addonData, GUIHANDLE handle);
 typedef const char* (*GUIControl_Progress_GetDescription)(void *addonData, GUIHANDLE handle);
+typedef const char* (*GUIControl_Edit_GetLabel2)(void *addonData, GUIHANDLE handle);
+typedef void        (*GUIControl_Edit_SetLabel2)(void *addonData, GUIHANDLE handle, const char *label);
 typedef GUIHANDLE   (*GUIListItem_Create)(void *addonData, const char *label, const char *label2, const char *iconImage, const char *thumbnailImage, const char *path);
 typedef const char* (*GUIListItem_GetLabel)(void *addonData, GUIHANDLE handle);
 typedef void        (*GUIListItem_SetLabel)(void *addonData, GUIHANDLE handle, const char *label);
@@ -176,6 +179,7 @@ typedef struct CB_GUILib
   GUIGetScreenHeight                  GetScreenHeight;
   GUIGetScreenWidth                   GetScreenWidth;
   GUIGetVideoResolution               GetVideoResolution;
+  GUIGetInfoLabel                     GetInfoLabel;
   GUIWindow_New                       Window_New;
   GUIWindow_Delete                    Window_Delete;
   GUIWindow_SetCallbacks              Window_SetCallbacks;
@@ -225,6 +229,8 @@ typedef struct CB_GUILib
   GUIControl_Progress_SetInfo         Control_Progress_SetInfo;
   GUIControl_Progress_GetInfo         Control_Progress_GetInfo;
   GUIControl_Progress_GetDescription  Control_Progress_GetDescription;
+  GUIControl_Edit_GetLabel2           Control_Edit_GetLabel2;
+  GUIControl_Edit_SetLabel2           Control_Edit_SetLabel2;
   GUIListItem_Create                  ListItem_Create;
   GUIListItem_GetLabel                ListItem_GetLabel;
   GUIListItem_SetLabel                ListItem_SetLabel;

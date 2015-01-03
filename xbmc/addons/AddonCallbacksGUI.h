@@ -49,6 +49,7 @@ public:
   static int          GetScreenHeight();
   static int          GetScreenWidth();
   static int          GetVideoResolution();
+  static const char * GetInfoLabel(const char *label, int context);
 
   static GUIHANDLE    Window_New(void *addonData, const char *xmlFilename, const char *defaultSkin, bool forceFallback, bool asDialog);
   static void         Window_Delete(void *addonData, GUIHANDLE handle);
@@ -99,6 +100,8 @@ public:
   static void         Control_Progress_SetInfo(void *addonData, GUIHANDLE handle, int iInfo);
   static int          Control_Progress_GetInfo(void *addonData, GUIHANDLE handle);
   static const char * Control_Progress_GetDescription(void *addonData, GUIHANDLE handle);
+  static const char * Control_Edit_GetLabel2(void *addonData, GUIHANDLE handle);
+  static void         Control_Edit_SetLabel2(void *addonData, GUIHANDLE handle, const char *label);
   static GUIHANDLE    ListItem_Create(void *addonData, const char *label, const char *label2, const char *iconImage, const char *thumbnailImage, const char *path);
   static const char * ListItem_GetLabel(void *addonData, GUIHANDLE handle);
   static void         ListItem_SetLabel(void *addonData, GUIHANDLE handle, const char *label);
