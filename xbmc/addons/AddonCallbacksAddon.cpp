@@ -33,6 +33,7 @@
 #include "utils/StringUtils.h"
 #include "utils/XMLUtils.h"
 #include "cores/dvdplayer/DVDCodecs/DVDCodecs.h"
+#include "interfaces/Builtins.h"
 
 using namespace XFILE;
 
@@ -53,6 +54,7 @@ CAddonCallbacksAddon::CAddonCallbacksAddon(CAddon* addon)
   m_callbacks->GetLocalizedString = GetLocalizedString;
   m_callbacks->GetDVDMenuLanguage = GetDVDMenuLanguage;
   m_callbacks->FreeString         = FreeString;
+  m_callbacks->ExecuteBuiltinFunction = ExecuteBuiltinFunction;
 
   m_callbacks->OpenFile           = OpenFile;
   m_callbacks->OpenFileForWrite   = OpenFileForWrite;
@@ -298,6 +300,12 @@ char* CAddonCallbacksAddon::GetDVDMenuLanguage(const void* addonData)
 void CAddonCallbacksAddon::FreeString(const void* addonData, char* str)
 {
   delete[] str;
+}
+
+int CAddonCallbacksAddon::ExecuteBuiltinFunction(void *addonData, const char *execString)
+{
+  std::string exec = execString;
+  return (CBuiltins::Execute(exec));
 }
 
 void* CAddonCallbacksAddon::OpenFile(const void* addonData, const char* strFileName, unsigned int flags)

@@ -43,6 +43,8 @@ public:
   static char* GetLocalizedString(const void* addonData, long dwCode);
   static char* GetDVDMenuLanguage(const void* addonData);
   static void FreeString(const void* addonData, char* str);
+  static int ExecuteBuiltinFunction(void *addonData, const char *execString);
+
 
   // file operations
   static void* OpenFile(const void* addonData, const char* strFileName, unsigned int flags);

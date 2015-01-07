@@ -178,6 +178,10 @@ namespace ADDON
         dlsym(m_libXBMC_addon, "XBMC_free_string");
       if (XBMC_free_string == NULL) { fprintf(stderr, "Unable to assign function %s\n", dlerror()); return false; }
 
+      XBMC_execute_builtin_function = (int (*)(void* HANDLE, void* CB, const char* execString))
+        dlsym(m_libXBMC_addon, "XBMC_execute_builtin_function");
+      if (XBMC_execute_builtin_function == NULL) { fprintf(stderr, "Unable to assign function %s\n", dlerror()); return false; }
+
       XBMC_get_dvd_menu_language = (char* (*)(void* HANDLE, void* CB))
         dlsym(m_libXBMC_addon, "XBMC_get_dvd_menu_language");
       if (XBMC_get_dvd_menu_language == NULL) { fprintf(stderr, "Unable to assign function %s\n", dlerror()); return false; }
@@ -350,6 +354,11 @@ namespace ADDON
     void FreeString(char* str)
     {
       return XBMC_free_string(m_Handle, m_Callbacks, str);
+    }
+
+    int ExecuteBuiltinFunction(const char *execFunction)
+    {
+      return XBMC_execute_builtin_function(m_Handle, m_Callbacks, execFunction);
     }
 
     /*!
@@ -568,6 +577,7 @@ namespace ADDON
     char* (*XBMC_get_localized_string)(void *HANDLE, void* CB, int dwCode);
     char* (*XBMC_get_dvd_menu_language)(void *HANDLE, void* CB);
     void (*XBMC_free_string)(void *HANDLE, void* CB, char* str);
+    int (*XBMC_execute_builtin_function)(void *HANDLE, void* CB, const char *execString);
     void* (*XBMC_open_file)(void *HANDLE, void* CB, const char* strFileName, unsigned int flags);
     void* (*XBMC_open_file_for_write)(void *HANDLE, void* CB, const char* strFileName, bool bOverWrite);
     ssize_t (*XBMC_read_file)(void *HANDLE, void* CB, void* file, void* lpBuf, size_t uiBufSize);

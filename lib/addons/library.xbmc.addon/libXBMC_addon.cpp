@@ -124,6 +124,14 @@ DLLEXPORT void XBMC_free_string(void* hdl, void* cb, char* str)
   ((CB_AddOnLib*)cb)->FreeString(((AddonCB*)hdl)->addonData, str);
 }
 
+DLLEXPORT int XBMC_execute_builtin_function(void* hdl, void* cb, const char* execString)
+{
+  if (cb == NULL)
+    return -1;
+
+  return ((CB_AddOnLib*)cb)->ExecuteBuiltinFunction(hdl, execString);
+}
+
 DLLEXPORT void* XBMC_open_file(void *hdl, void* cb, const char* strFileName, unsigned int flags)
 {
   if (cb == NULL)
